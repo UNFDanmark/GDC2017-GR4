@@ -103,7 +103,7 @@ GameObject:
   - 23: {fileID: 596703009}
   m_Layer: 0
   m_Name: Arena
-  m_TagString: Untagged
+  m_TagString: Arena
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -143,7 +143,7 @@ BoxCollider:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 596703008}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 3610d5e3f5c86de4c91756472385400d, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -250,7 +250,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 651544831}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -27.39}
+  m_LocalPosition: {x: 0, y: 8.5, z: -27.39}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
@@ -271,7 +271,7 @@ GameObject:
   - 114: {fileID: 969745504}
   m_Layer: 0
   m_Name: PlayerOne
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -284,8 +284,8 @@ Rigidbody:
   m_GameObject: {fileID: 969745498}
   serializedVersion: 2
   m_Mass: 1
-  m_Drag: 1
-  m_AngularDrag: 0.05
+  m_Drag: 0.05
+  m_AngularDrag: 1
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -326,7 +326,7 @@ SphereCollider:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 969745498}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 3c19faca037e90147858366786cb0459, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -346,7 +346,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 969745498}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -9, y: 1, z: 0}
+  m_LocalPosition: {x: -8, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
@@ -366,11 +366,17 @@ MonoBehaviour:
   horizontalAxis: HorizontalP1
   verticalAxis: VerticalP1
   chargeDashAxis: ChargeDashP1
+  chargeMax: 1.5
+  pushForce: 1
   walkSpeed: 0.1
-  body: {fileID: 0}
-  chargeStart: 0
-  charging: 0
   dashForce: 15
+  spawn: {x: -8, y: 1, z: 0}
+  charging: 0
+  onGround: 0
+  chargeStart: 0
+  chargeDir: 0
+  body: {fileID: 0}
+  collision: {fileID: 0}
 --- !u!1 &1006104442
 GameObject:
   m_ObjectHideFlags: 0
@@ -449,7 +455,7 @@ GameObject:
   - 114: {fileID: 1748251906}
   m_Layer: 0
   m_Name: PlayerTwo
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -462,8 +468,8 @@ Rigidbody:
   m_GameObject: {fileID: 1748251900}
   serializedVersion: 2
   m_Mass: 1
-  m_Drag: 1
-  m_AngularDrag: 0.05
+  m_Drag: 0.05
+  m_AngularDrag: 1
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -504,7 +510,7 @@ SphereCollider:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1748251900}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 3c19faca037e90147858366786cb0459, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -544,8 +550,14 @@ MonoBehaviour:
   horizontalAxis: HorizontalP2
   verticalAxis: VerticalP2
   chargeDashAxis: ChargeDashP2
+  chargeMax: 1.5
+  pushForce: 1
   walkSpeed: 0.1
-  body: {fileID: 0}
-  chargeStart: 0
-  charging: 0
   dashForce: 15
+  spawn: {x: 8, y: 1, z: 0}
+  charging: 0
+  onGround: 0
+  chargeStart: 0
+  chargeDir: 0
+  body: {fileID: 0}
+  collision: {fileID: 0}
