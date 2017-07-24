@@ -40,46 +40,36 @@ public class PlayerBehaviour : MonoBehaviour {
 	void Update ()
     {
         Charge();
-        //print(Input.GetAxis(chargeDashAxis)+ " " + Input.GetAxis(verticalAxis) + " " + Input.GetAxis(horizontalAxis));
     }
 
     void FixedUpdate()
     {
         Move(walkSpeed);
-        if (transform.position.y < -10)
-        {
-            KO();
-        }
-        
+        if (KOCheck()) KO();
     }
 
-    
 
-    public void Move(float speed)
+    //=====================================================================
+    // UNITY BUILD IN ABOVE, OWN FUNCTIONS BELOW
+    //=====================================================================
+
+
+    public void Charge()    //Charge up a dash
     {
-        if (onGround)
+        if (Input.GetAxis(chargeDashAxis) == 1) //Check if the charge/dash buttons are being held
         {
-
-            body.velocity = new Vector3(body.velocity.x + speed * Input.GetAxis(horizontalAxis), body.velocity.y, body.velocity.z);
-        }
-    }
-
-    public void Charge()
-    {
-        if(Input.GetAxis(chargeDashAxis) == 1)
-        {
-            if (!charging)
+            if (!charging)  //Check if already charging
             {
-                chargeStart = Time.time;
-                charging = true;
+                chargeStart = Time.time;    //Set the start time of the charge
+                charging = true;    //Inform the system that the charge has started
             }
         }
         else
         {
-            if(charging)
+            if (charging)   //Check if previously charging
             {
-                Dash();
-                charging = false;
+                Dash(); //Launch dash
+                charging = false;   //Inform the system that the charge has ended
             }
         }
     }
@@ -89,6 +79,16 @@ public class PlayerBehaviour : MonoBehaviour {
         float chargeTime = Mathf.Min(chargeMax, Time.time - chargeStart);
         body.velocity = body.velocity + new Vector3(0, dashForce * chargeTime, 0);
     }
+
+    public void Move(float speed)   //Standard Movement
+    {
+        if (onGround)   //Check if on ground
+        {
+            //Accelerate the current speed
+            body.velocity = new Vector3(body.velocity.x + speed * Input.GetAxis(horizontalAxis), body.velocity.y, body.velocity.z);
+        }
+    }
+
 
     private void OnCollisionEnter(Collision col)
     {
@@ -122,5 +122,10 @@ public class PlayerBehaviour : MonoBehaviour {
         transform.position = spawn;
         body.velocity = new Vector3(0, 0, 0);
         body.angularVelocity = new Vector3(0, 0, 0);
+    }
+
+    public bool KOCheck()
+    {
+        return (transform.position.y < -15 || transform.position.y > 40 || transform.position.x > 40 || transform.position.x < -40);
     }
 }
