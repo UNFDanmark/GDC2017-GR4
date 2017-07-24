@@ -3,31 +3,32 @@ using System.Collections;
 
 public class PlayerBehaviour : MonoBehaviour {
 
-    public string horizontalAxis;
-    public string verticalAxis;
-    public string chargeDashAxis;
+    public string horizontalAxis;   //The axis used for moving left and right and for aiming
+    public string verticalAxis; //Another axis used for aiming
+    public string chargeDashAxis;   //The axis used for the inputs to charge and execute a dash
     [Space(20)]
-    public float chargeMax = 5;
-    public float pushForce = 10;
-    public float walkSpeed = 1;
-    public float dashForce = 25;
+    public float chargeMax = 5; //The maximal amount of time in which the player can charge
+    public float pushForce = 10;    //The amount of force with which the player pushes other objects
+    public float walkSpeed = 1; //The amount of speed with which the player "walks"
+    public float dashForce = 25;    //The amount of force with which the player dashes
     [Space(20)]
-    public Vector3 spawn; 
+    public Vector3 spawn; //The spawn location for the player
     [Space(20)]
-    public bool charging = false;
-    public bool onGround = false;
-    public float chargeStart = 0;
-    public float chargeDir = 0;
+    public bool charging = false;   //A boolean that keeps track of whether the player is charging
+    public bool onGround = false;   //A boolean that keeps track of whether the player is on the ground
+    public float chargeStart = 0;   //A boolean that keeps track of when the player started charging their dash
+    public float chargeDir = 0; //The direction in which the currently charging dash is pointed
     [Space(20)]
-    public Rigidbody body;
-    public Collider collision;
+    public Rigidbody body;  //The object's Rigidbody
+    public Collider collision;  //The object's collider
 
 
 
 
     void Awake ()
     {
-        body = GetComponent<Rigidbody>();
+        body = GetComponent<Rigidbody>();   //Sets the Rigidbody
+        spawn = transform.position; //Sets the spawn position to the start position
     }
 
 	// Use this for initialization
@@ -39,13 +40,41 @@ public class PlayerBehaviour : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
-        Charge();
+        Charge();   //Run the charge command
     }
 
-    void FixedUpdate()
+    void FixedUpdate()  //Runs 50 times per second
     {
-        Move(walkSpeed);
-        if (KOCheck()) KO();
+        Move(walkSpeed);    //Run the walk command with the object's walk speed
+        if (KOCheck()) KO();    //Checks if the player is KO'd, and if they are, KO them
+    }
+    
+    public void OnCollisionEnter(Collision col)    //Runs when initiating contact with other objects
+    {
+        if (col.gameObject.tag == gameObject.tag)    //Checks if the other object's tag matches the current tag
+        {
+            Rigidbody other = col.gameObject.GetComponent<Rigidbody>(); //Stores the collision object's Rigidbody in other
+            if (other.velocity.magnitude > body.velocity.magnitude) //Checks if the current object moves slower than the other object
+            {
+                body.velocity = body.velocity + (body.position - other.position).normalized * pushForce * other.velocity.magnitude; //Shoots self away from the other player
+            }
+        }
+    }
+
+    public void OnCollisionStay(Collision col) //Runs while in contact with other object
+    {
+        if (col.gameObject.tag != gameObject.tag)   //Checks if the tags DO NOT match
+        {
+            onGround = true;    //Inform's the game that the player is on the ground
+        }
+    }
+
+    public void OnCollisionExit(Collision col) //Runs when leaving contact with other objects
+    {
+        if (col.gameObject.tag != gameObject.tag)   //Checks if the tags DO NOT match
+        {
+            onGround = false;   //Informs the game that the player is not on ground
+        }
     }
 
 
@@ -80,6 +109,18 @@ public class PlayerBehaviour : MonoBehaviour {
         body.velocity = body.velocity + new Vector3(0, dashForce * chargeTime, 0);
     }
 
+    public void KO()    //KO's a player and respawns them
+    {
+        transform.position = spawn; //Sets the player's current position to the spawn position
+        body.velocity = new Vector3(0, 0, 0);   //Sets the current speed to be 0
+        body.angularVelocity = new Vector3(0, 0, 0);    //Stops the current rotation
+    }
+
+    public bool KOCheck()   //Checks if the player is KO'd
+    {
+        return (transform.position.y < -15 || transform.position.y > 40 || transform.position.x > 40 || transform.position.x < -40);    //If the player is not within a box, they're out of bounds and dies
+    }
+
     public void Move(float speed)   //Standard Movement
     {
         if (onGround)   //Check if on ground
@@ -90,42 +131,7 @@ public class PlayerBehaviour : MonoBehaviour {
     }
 
 
-    private void OnCollisionEnter(Collision col)
-    {
-        if(col.gameObject.tag == gameObject.tag)
-        {
-            Rigidbody other = col.gameObject.GetComponent<Rigidbody>();
-            if (other.velocity.magnitude > body.velocity.magnitude)
-            {
-                body.velocity = body.velocity + (body.position - other.position).normalized * pushForce * other.velocity.magnitude;
-            }
-        }
-    }
 
-    private void OnCollisionStay(Collision col)
-    {
-        if (col.gameObject.tag != gameObject.tag)
-        {
-            onGround = true;
-        }
-    }
-    private void OnCollisionExit(Collision col)
-    {
-        if (col.gameObject.tag != gameObject.tag)
-        {
-            onGround = false;
-        }
-    }
 
-    public void KO()
-    {
-        transform.position = spawn;
-        body.velocity = new Vector3(0, 0, 0);
-        body.angularVelocity = new Vector3(0, 0, 0);
-    }
 
-    public bool KOCheck()
-    {
-        return (transform.position.y < -15 || transform.position.y > 40 || transform.position.x > 40 || transform.position.x < -40);
-    }
 }
