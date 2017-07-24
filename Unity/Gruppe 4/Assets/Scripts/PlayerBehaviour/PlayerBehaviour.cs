@@ -11,16 +11,18 @@ public class PlayerBehaviour : MonoBehaviour {
     public float pushForce = 10;    //The amount of force with which the player pushes other objects
     public float walkSpeed = 1; //The amount of speed with which the player "walks"
     public float dashForce = 25;    //The amount of force with which the player dashes
+    public float chargeParachuteFactor = 2;
+    [Space(20)]
+    public Rigidbody body;  //The object's Rigidbody
+    public Collider collision;  //The object's collider
     [Space(20)]
     public Vector3 spawn; //The spawn location for the player
+    public float chargeDir = 90; //The direction in which the currently charging dash is pointed
     [Space(20)]
     public bool charging = false;   //A boolean that keeps track of whether the player is charging
     public bool onGround = false;   //A boolean that keeps track of whether the player is on the ground
     public float chargeStart = 0;   //A boolean that keeps track of when the player started charging their dash
-    public float chargeDir = 0; //The direction in which the currently charging dash is pointed
-    [Space(20)]
-    public Rigidbody body;  //The object's Rigidbody
-    public Collider collision;  //The object's collider
+
 
 
 
@@ -45,13 +47,24 @@ public class PlayerBehaviour : MonoBehaviour {
 
     void FixedUpdate()  //Runs 50 times per second
     {
-        Move(walkSpeed);    //Run the walk command with the object's walk speed
+        if (!charging)
+        {
+            Move(walkSpeed);    //Run the walk command with the object's walk speed
+        }
+        else 
+        {
+            if (body.velocity.y < 0)
+            {
+                body.velocity = (new Vector3(body.velocity.x, body.velocity.y / chargeParachuteFactor, body.velocity.z));
+            }
+        }
+
         if (KOCheck()) KO();    //Checks if the player is KO'd, and if they are, KO them
     }
     
     public void OnCollisionEnter(Collision col)    //Runs when initiating contact with other objects
     {
-        if (col.gameObject.tag == gameObject.tag)    //Checks if the other object's tag matches the current tag
+        if (col.gameObject.CompareTag(gameObject.tag))  //Checks if the other object's tag matches the current tag
         {
             Rigidbody other = col.gameObject.GetComponent<Rigidbody>(); //Stores the collision object's Rigidbody in other
             if (other.velocity.magnitude > body.velocity.magnitude) //Checks if the current object moves slower than the other object
@@ -63,7 +76,7 @@ public class PlayerBehaviour : MonoBehaviour {
 
     public void OnCollisionStay(Collision col) //Runs while in contact with other object
     {
-        if (col.gameObject.tag != gameObject.tag)   //Checks if the tags DO NOT match
+        if (!col.gameObject.CompareTag(gameObject.tag)) //Checks if the tags DO NOT match
         {
             onGround = true;    //Inform's the game that the player is on the ground
         }
@@ -71,7 +84,7 @@ public class PlayerBehaviour : MonoBehaviour {
 
     public void OnCollisionExit(Collision col) //Runs when leaving contact with other objects
     {
-        if (col.gameObject.tag != gameObject.tag)   //Checks if the tags DO NOT match
+        if (!col.gameObject.CompareTag(gameObject.tag)) //Checks if the tags DO NOT match
         {
             onGround = false;   //Informs the game that the player is not on ground
         }
@@ -91,10 +104,36 @@ public class PlayerBehaviour : MonoBehaviour {
             {
                 chargeStart = Time.time;    //Set the start time of the charge
                 charging = true;    //Inform the system that the charge has started
+                chargeDir = SetChargeDirection((int)Mathf.Round(Input.GetAxis(horizontalAxis)), (int)Mathf.Round(Input.GetAxis(verticalAxis)));
+            }
+            else
+            {
+                /*if (chargeDir > 0 && chargeDir < 180)
+                {
+                    chargeDir -= Input.GetAxis(horizontalAxis) * aimSensitivity * Time.deltaTime;
+                }
+                else if (chargeDir > 180 && chargeDir < 360)
+                {
+                    chargeDir += Input.GetAxis(horizontalAxis) * aimSensitivity * Time.deltaTime;
+                }
+
+                if (chargeDir > 90 && chargeDir < 270)
+                {
+                    chargeDir -= Input.GetAxis(verticalAxis) * aimSensitivity * Time.deltaTime;
+                }
+                else if (chargeDir < 90 || chargeDir > 270)
+                {
+                    chargeDir += Input.GetAxis(verticalAxis) * aimSensitivity * Time.deltaTime;
+                }*/
+
+                chargeDir = SetChargeDirection((int)Mathf.Round(Input.GetAxis(horizontalAxis)), (int)Mathf.Round(Input.GetAxis(verticalAxis)));
+
+                
             }
         }
         else
         {
+            chargeDir = SetChargeDirection((int)Mathf.Round(Input.GetAxis(horizontalAxis)), (int)Mathf.Round(Input.GetAxis(verticalAxis)));
             if (charging)   //Check if previously charging
             {
                 Dash(); //Launch dash
@@ -106,7 +145,8 @@ public class PlayerBehaviour : MonoBehaviour {
     public void Dash()
     {
         float chargeTime = Mathf.Min(chargeMax, Time.time - chargeStart);
-        body.velocity = body.velocity + new Vector3(0, dashForce * chargeTime, 0);
+        if (onGround) body.velocity = new Vector3(0, 0, 0);
+        body.velocity = body.velocity + new Vector3(Mathf.Cos(chargeDir / 180 * Mathf.PI) * dashForce * chargeTime, Mathf.Sin(chargeDir / 180 * Mathf.PI) * dashForce * chargeTime, 0);
     }
 
     public void KO()    //KO's a player and respawns them
@@ -130,8 +170,49 @@ public class PlayerBehaviour : MonoBehaviour {
         }
     }
 
-
-
-
+    public float SetChargeDirection(int x, int y)
+    {
+        switch (x)
+        {
+            case -1:
+                switch(y)
+                {
+                    case -1:
+                        return (225);
+                    case 0:
+                        return (180);
+                    case 1:
+                        return (135);
+                    default:
+                        return (180);
+                }
+            case 0:
+                switch (y)
+                {
+                    case -1:
+                        return (270);
+                    case 0:
+                        return (chargeDir);
+                    case 1:
+                        return (90);
+                    default:
+                        return (chargeDir);
+                }
+            case 1:
+                switch (y)
+                {
+                    case -1:
+                        return (315);
+                    case 0:
+                        return (0);
+                    case 1:
+                        return (45);
+                    default:
+                        return (0);
+                }
+            default:
+                return (chargeDir);
+        }
+    }
 
 }
