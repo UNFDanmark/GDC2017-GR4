@@ -7,7 +7,13 @@ public class PlayerBehaviour : MonoBehaviour {
     public string verticalAxis; //Another axis used for aiming
     public string chargeDashAxis;   //The axis used for the inputs to charge and execute a dash
     [Space(20)]
-    public float chargeMax = 5; //The maximal amount of time in which the player can charge
+    public float maxEnergy = 2;
+    public float energyCostRate = 1;
+    public float energyCostMin = 0.1f;
+    public float energyRegenRate = 2;
+    [Space(10)]
+    public float chargeMax = 0.9f; //The maximal amount of time in which the player can charge
+    public float chargeMin = 0.15f; //A bonus length aplied to all charges
     public float pushForce = 10;    //The amount of force with which the player pushes other objects
     public float walkSpeed = 1; //The amount of speed with which the player "walks"
     public float dashForce = 25;    //The amount of force with which the player dashes
@@ -22,6 +28,7 @@ public class PlayerBehaviour : MonoBehaviour {
     public bool charging = false;   //A boolean that keeps track of whether the player is charging
     public bool onGround = false;   //A boolean that keeps track of whether the player is on the ground
     public float chargeStart = 0;   //A boolean that keeps track of when the player started charging their dash
+    public float energy;
 
 
 
@@ -31,6 +38,7 @@ public class PlayerBehaviour : MonoBehaviour {
     {
         body = GetComponent<Rigidbody>();   //Sets the Rigidbody
         spawn = transform.position; //Sets the spawn position to the start position
+        energy = maxEnergy;
     }
 
 	// Use this for initialization
@@ -43,6 +51,7 @@ public class PlayerBehaviour : MonoBehaviour {
 	void Update ()
     {
         Charge();   //Run the charge command
+        RegenerateEnergy();
     }
 
     void FixedUpdate()  //Runs 50 times per second
@@ -144,9 +153,16 @@ public class PlayerBehaviour : MonoBehaviour {
 
     public void Dash()
     {
-        float chargeTime = Mathf.Min(chargeMax, Time.time - chargeStart);
-        if (onGround) body.velocity = new Vector3(0, 0, 0);
-        body.velocity = body.velocity + new Vector3(Mathf.Cos(chargeDir / 180 * Mathf.PI) * dashForce * chargeTime, Mathf.Sin(chargeDir / 180 * Mathf.PI) * dashForce * chargeTime, 0);
+        if (energy >= energyCostMin)
+        {
+            energy -= energyCostMin;
+            float chargeTime = Mathf.Min(chargeMax, Time.time - chargeStart, energy / energyCostRate);
+            energy -= chargeTime * energyCostRate;
+            
+            chargeTime += chargeMin;
+            if (onGround) body.velocity = new Vector3(0, 0, 0);
+            body.velocity = body.velocity + new Vector3(Mathf.Cos(chargeDir / 180 * Mathf.PI) * dashForce * chargeTime, Mathf.Sin(chargeDir / 180 * Mathf.PI) * dashForce * chargeTime, 0);
+        }
     }
 
     public void KO()    //KO's a player and respawns them
@@ -167,6 +183,15 @@ public class PlayerBehaviour : MonoBehaviour {
         {
             //Accelerate the current speed
             body.velocity = new Vector3(body.velocity.x + speed * Input.GetAxis(horizontalAxis), body.velocity.y, body.velocity.z);
+        }
+    }
+
+    public void RegenerateEnergy()
+    {
+        if(onGround)
+        {
+            print("HI");
+            energy = Mathf.Min(energy + energyRegenRate * Time.deltaTime, maxEnergy);
         }
     }
 
