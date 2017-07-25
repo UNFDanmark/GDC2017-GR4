@@ -22,6 +22,7 @@ public class PlayerBehaviour : MonoBehaviour {
     [Space(20)]
     public Rigidbody body;  //The object's Rigidbody
     public Collider collision;  //The object's collider
+    public GameObject main;
     [Space(20)]
     public Vector3 spawn; //The spawn location for the player
     public float chargeDir = 90; //The direction in which the currently charging dash is pointed
@@ -34,9 +35,9 @@ public class PlayerBehaviour : MonoBehaviour {
     public float timeOfLastDash = 0;
 
 
+    public PlayerSounds sound;
 
-
-
+    
     void Awake ()
     {
         body = GetComponent<Rigidbody>();   //Sets the Rigidbody
@@ -78,13 +79,18 @@ public class PlayerBehaviour : MonoBehaviour {
     
     public void OnCollisionEnter(Collision col)    //Runs when initiating contact with other objects
     {
-        if (col.gameObject.CompareTag(gameObject.tag))  //Checks if the other object's tag matches the current tag
+        if (col.gameObject.CompareTag(gameObject.tag))  //Checks if the other object's tag matches the current tag (is the object another player?)
         {
             Rigidbody other = col.gameObject.GetComponent<Rigidbody>(); //Stores the collision object's Rigidbody in other
             if (other.velocity.magnitude > body.velocity.magnitude) //Checks if the current object moves slower than the other object
             {
+                sound.HitPlayer(body.velocity.magnitude + other.velocity.magnitude);
                 body.velocity = body.velocity + (body.position - other.position).normalized * pushForce * other.velocity.magnitude; //Shoots self away from the other player
             }
+        }
+        else
+        {
+            sound.HitGround(System.Math.Abs(body.velocity.y));
         }
     }
 
@@ -162,6 +168,7 @@ public class PlayerBehaviour : MonoBehaviour {
     {
         if (energy >= energyCostMin && chargeDir >= 0)
         {
+            sound.Dash();
             energy -= energyCostMin;
             float chargeTime = Mathf.Min(chargeMax, Time.time - chargeStart, energy / energyCostRate);
             energy -= chargeTime * energyCostRate;
@@ -179,6 +186,10 @@ public class PlayerBehaviour : MonoBehaviour {
         body.velocity = new Vector3(0, 0, 0);   //Sets the current speed to be 0
         body.angularVelocity = new Vector3(0, 0, 0);    //Stops the current rotation
         energy = maxEnergy;
+
+        //======================================================================================
+
+        main.GetComponent<Main>().KOD(gameObject, this);
     }
 
     public bool KOCheck()   //Checks if the player is KO'd
