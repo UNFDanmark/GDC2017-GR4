@@ -22,8 +22,15 @@ public class PlayerAim : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
-        Vector2 screenPosition = Camera.current.WorldToScreenPoint(player.transform.position);
-        transform.position = screenPosition;
-        transform.eulerAngles = new Vector3(0, 0, playerBehaviour.chargeDir);
+        if (playerBehaviour.charging && playerBehaviour.chargeDir >= 0)
+        {
+            Vector2 screenPosition = Camera.current.WorldToScreenPoint(player.transform.position);
+            transform.position = screenPosition;
+            transform.eulerAngles = new Vector3(0, 0, playerBehaviour.chargeDir);
+        }
+        else
+        {
+            transform.position = new Vector3(-250, -250, 0);
+        }
 	}
 }

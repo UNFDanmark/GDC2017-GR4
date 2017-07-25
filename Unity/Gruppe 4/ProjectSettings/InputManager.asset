@@ -42,9 +42,9 @@ InputManager:
     descriptiveName: 
     descriptiveNegativeName: 
     negativeButton: 
-    positiveButton: left ctrl
+    positiveButton: space
     altNegativeButton: 
-    altPositiveButton: space
+    altPositiveButton: left ctrl
     gravity: 1000
     dead: 0.001
     sensitivity: 1000
@@ -153,8 +153,8 @@ InputManager:
     m_Name: HorizontalP2
     descriptiveName: 
     descriptiveNegativeName: 
-    negativeButton: left
-    positiveButton: right
+    negativeButton: '[4]'
+    positiveButton: '[6]'
     altNegativeButton: 
     altPositiveButton: 
     gravity: 1000
@@ -169,15 +169,15 @@ InputManager:
     m_Name: VerticalP2
     descriptiveName: 
     descriptiveNegativeName: 
-    negativeButton: up
-    positiveButton: down
-    altNegativeButton: 
+    negativeButton: '[5]'
+    positiveButton: '[8]'
+    altNegativeButton: '[2]'
     altPositiveButton: 
     gravity: 1000
     dead: 0.001
     sensitivity: 1000
     snap: 0
-    invert: 1
+    invert: 0
     type: 0
     axis: 1
     joyNum: 0
@@ -186,9 +186,9 @@ InputManager:
     descriptiveName: 
     descriptiveNegativeName: 
     negativeButton: 
-    positiveButton: right ctrl
+    positiveButton: enter
     altNegativeButton: 
-    altPositiveButton: '[0]'
+    altPositiveButton: 
     gravity: 1000
     dead: 0.001
     sensitivity: 1000

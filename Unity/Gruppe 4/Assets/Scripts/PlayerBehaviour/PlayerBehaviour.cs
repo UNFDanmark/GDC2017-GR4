@@ -11,6 +11,7 @@ public class PlayerBehaviour : MonoBehaviour {
     public float energyCostRate = 1;
     public float energyCostMin = 0.1f;
     public float energyRegenRate = 2;
+    public float gracePeriod = 0.1f;
     [Space(10)]
     public float chargeMax = 0.9f; //The maximal amount of time in which the player can charge
     public float chargeMin = 0.15f; //A bonus length aplied to all charges
@@ -29,6 +30,8 @@ public class PlayerBehaviour : MonoBehaviour {
     public bool onGround = false;   //A boolean that keeps track of whether the player is on the ground
     public float chargeStart = 0;   //A boolean that keeps track of when the player started charging their dash
     public float energy;
+    public float timeOfLastTouch = 0;
+    public float timeOfLastDash = 0;
 
 
 
@@ -39,6 +42,8 @@ public class PlayerBehaviour : MonoBehaviour {
         body = GetComponent<Rigidbody>();   //Sets the Rigidbody
         spawn = transform.position; //Sets the spawn position to the start position
         energy = maxEnergy;
+        timeOfLastTouch = 0;
+        timeOfLastDash = 0;
     }
 
 	// Use this for initialization
@@ -88,6 +93,7 @@ public class PlayerBehaviour : MonoBehaviour {
         if (!col.gameObject.CompareTag(gameObject.tag)) //Checks if the tags DO NOT match
         {
             onGround = true;    //Inform's the game that the player is on the ground
+            timeOfLastTouch = Time.time;
         }
     }
 
@@ -109,11 +115,11 @@ public class PlayerBehaviour : MonoBehaviour {
     {
         if (Input.GetAxis(chargeDashAxis) == 1) //Check if the charge/dash buttons are being held
         {
-            if (!charging)  //Check if already charging
+            if (!charging && energy >= energyCostMin)  //Check if already charging
             {
                 chargeStart = Time.time;    //Set the start time of the charge
                 charging = true;    //Inform the system that the charge has started
-                chargeDir = SetChargeDirection((int)Mathf.Round(Input.GetAxis(horizontalAxis)), (int)Mathf.Round(Input.GetAxis(verticalAxis)));
+                
             }
             else
             {
@@ -135,10 +141,11 @@ public class PlayerBehaviour : MonoBehaviour {
                     chargeDir += Input.GetAxis(verticalAxis) * aimSensitivity * Time.deltaTime;
                 }*/
 
-                chargeDir = SetChargeDirection((int)Mathf.Round(Input.GetAxis(horizontalAxis)), (int)Mathf.Round(Input.GetAxis(verticalAxis)));
+                
 
                 
             }
+            chargeDir = SetChargeDirection((int)Mathf.Round(Input.GetAxis(horizontalAxis)), (int)Mathf.Round(Input.GetAxis(verticalAxis)));
         }
         else
         {
@@ -153,15 +160,16 @@ public class PlayerBehaviour : MonoBehaviour {
 
     public void Dash()
     {
-        if (energy >= energyCostMin)
+        if (energy >= energyCostMin && chargeDir >= 0)
         {
             energy -= energyCostMin;
             float chargeTime = Mathf.Min(chargeMax, Time.time - chargeStart, energy / energyCostRate);
             energy -= chargeTime * energyCostRate;
             
             chargeTime += chargeMin;
-            if (onGround) body.velocity = new Vector3(0, 0, 0);
+            
             body.velocity = body.velocity + new Vector3(Mathf.Cos(chargeDir / 180 * Mathf.PI) * dashForce * chargeTime, Mathf.Sin(chargeDir / 180 * Mathf.PI) * dashForce * chargeTime, 0);
+            timeOfLastDash = Time.time;
         }
     }
 
@@ -170,6 +178,7 @@ public class PlayerBehaviour : MonoBehaviour {
         transform.position = spawn; //Sets the player's current position to the spawn position
         body.velocity = new Vector3(0, 0, 0);   //Sets the current speed to be 0
         body.angularVelocity = new Vector3(0, 0, 0);    //Stops the current rotation
+        energy = maxEnergy;
     }
 
     public bool KOCheck()   //Checks if the player is KO'd
@@ -188,9 +197,13 @@ public class PlayerBehaviour : MonoBehaviour {
 
     public void RegenerateEnergy()
     {
-        if(onGround)
+        if(Time.time - timeOfLastTouch <= gracePeriod && Time.time - timeOfLastDash >= gracePeriod) 
         {
             energy = Mathf.Min(energy + energyRegenRate * Time.deltaTime, maxEnergy);
+        }
+        else if(energy < energyCostMin)
+        {
+            energy += energyRegenRate / 45 * Time.deltaTime;
         }
     }
 
@@ -216,11 +229,11 @@ public class PlayerBehaviour : MonoBehaviour {
                     case -1:
                         return (270);
                     case 0:
-                        return (chargeDir);
+                        return (-1);
                     case 1:
                         return (90);
                     default:
-                        return (chargeDir);
+                        return (-1);
                 }
             case 1:
                 switch (y)
@@ -235,7 +248,7 @@ public class PlayerBehaviour : MonoBehaviour {
                         return (0);
                 }
             default:
-                return (chargeDir);
+                return (-1);
         }
     }
 
