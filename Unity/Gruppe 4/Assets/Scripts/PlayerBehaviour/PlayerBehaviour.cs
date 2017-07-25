@@ -190,7 +190,6 @@ public class PlayerBehaviour : MonoBehaviour {
     {
         if(onGround)
         {
-            print("HI");
             energy = Mathf.Min(energy + energyRegenRate * Time.deltaTime, maxEnergy);
         }
     }

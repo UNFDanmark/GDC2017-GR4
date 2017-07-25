@@ -199,7 +199,7 @@ GameObject:
   - 222: {fileID: 227087747}
   - 114: {fileID: 227087746}
   m_Layer: 5
-  m_Name: Text
+  m_Name: Name
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -235,7 +235,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -636,6 +636,7 @@ GameObject:
   - 224: {fileID: 910583039}
   - 222: {fileID: 910583041}
   - 114: {fileID: 910583040}
+  - 114: {fileID: 910583042}
   m_Layer: 5
   m_Name: Energy
   m_TagString: Untagged
@@ -694,6 +695,18 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 910583038}
+--- !u!114 &910583042
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 910583038}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ef908ec6c08f1c469c01c0a092d6654, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 1748251900}
 --- !u!1 &969745498
 GameObject:
   m_ObjectHideFlags: 0
@@ -912,7 +925,7 @@ GameObject:
   - 222: {fileID: 1062251848}
   - 114: {fileID: 1062251847}
   m_Layer: 5
-  m_Name: Text
+  m_Name: Name
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -948,7 +961,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -1137,7 +1150,7 @@ GameObject:
   - 222: {fileID: 1665471626}
   - 114: {fileID: 1665471625}
   m_Layer: 5
-  m_Name: PlayerOneImage (1)
+  m_Name: PlayerTwoImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1211,6 +1224,7 @@ GameObject:
   - 224: {fileID: 1721888134}
   - 222: {fileID: 1721888136}
   - 114: {fileID: 1721888135}
+  - 114: {fileID: 1721888137}
   m_Layer: 5
   m_Name: Energy
   m_TagString: Untagged
@@ -1269,6 +1283,18 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1721888133}
+--- !u!114 &1721888137
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1721888133}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ef908ec6c08f1c469c01c0a092d6654, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 969745498}
 --- !u!1 &1748251900
 GameObject:
   m_ObjectHideFlags: 0
