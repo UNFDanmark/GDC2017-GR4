@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class OutOfScreenMarkers : MonoBehaviour {
     public GameObject player;
-    private PlayerBehaviour playerScript;
+    public PlayerBehaviour playerScript;
     public Image image;
     public float arrowSize = 32;
     public Image icon;
@@ -27,7 +27,7 @@ public class OutOfScreenMarkers : MonoBehaviour {
 
     public void SetMarker()
     {
-        Vector3 playerScreenPosition = Camera.current.WorldToScreenPoint(player.transform.position);
+        Vector3 playerScreenPosition = Camera.main.WorldToScreenPoint(player.transform.position);
         if (playerScreenPosition.x > Screen.width || playerScreenPosition.x < 0 || playerScreenPosition.y > Screen.height || playerScreenPosition.y < 0)
         {
             transform.position = new Vector2(Mathf.Max(Mathf.Min(Screen.width - arrowSize, playerScreenPosition.x), arrowSize), Mathf.Max(Mathf.Min(Screen.height - arrowSize, playerScreenPosition.y), arrowSize));
