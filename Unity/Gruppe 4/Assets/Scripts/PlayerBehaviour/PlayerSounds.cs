@@ -10,44 +10,53 @@ public class PlayerSounds : MonoBehaviour {
     public AudioClip[] hitPlayer;
     public AudioClip[] dashCharge;
 
-    public new AudioSource audio;
+    public new AudioSource[] audio; //should have as many as there are unique sounds to play in parallel
 
     public void Dash()
     {
-        audio.volume = 1;
-        Play(dash);
+        audio[0].volume = 0.5f;
+        Play(dash,0);
     }
 
     public void HitGround(float velocity)
     {
-        CalcVolume(velocity);
         //volume increases as velocity increases
-        audio.volume = 3;
-        Play(hitGround);
+        //Debug.Log("hit ground with velocity " + velocity);
+
+        audio[1].volume = velocity * 0.5f;
+        Play(hitGround,1);
     }
 
     public void HitPlayer(float velocity)
     {
-        CalcVolume(velocity);
-        audio.volume = 1;
-        Play(hitPlayer);
+        Debug.Log("Hit player with velocity " + velocity);
+        //TODO calc volume
+        audio[2].volume = velocity * 0.5f;
+        Play(hitPlayer,2);
+    }
+
+    public void ChargeDash()
+    {
+        audio[3].volume = 0.3f;
+        Play(dashCharge, 3);
+    }
+
+    public void CancelDashCharge()
+    {
+        audio[3].Stop();
     }
 
     //TODO special situation for dashCharge (can be cancelled!)
     //TODO special situation for ambience (loops, should be put in a different script!)
     
-    private float CalcVolume(float velocity)
-    {
-        Debug.Log("Velocity at collision: " + velocity);
-        return 1;
-    }
+
 
     //generic play function - is called in specific audio settings
-    private void Play(AudioClip[] sound)
+    private void Play(AudioClip[] sound, int i)
     {
         if (sound.Length == 0) return;
-        audio.clip = sound[Random.Range(0, sound.Length)];
-        audio.Play();
+        audio[i].clip = sound[Random.Range(0, sound.Length)];
+        audio[i].Play();
     }
     
     // Use this for initialization

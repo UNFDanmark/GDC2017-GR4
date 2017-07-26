@@ -3,6 +3,7 @@ using System.Collections;
 
 public class PlayerBehaviour : MonoBehaviour {
 
+    public bool mainPlayer = false;
     public string horizontalAxis;   //The axis used for moving left and right and for aiming
     public string verticalAxis; //Another axis used for aiming
     public string chargeDashAxis;   //The axis used for the inputs to charge and execute a dash
@@ -12,6 +13,7 @@ public class PlayerBehaviour : MonoBehaviour {
     public float energyCostMin = 0.1f;
     public float energyRegenRate = 2;
     public float gracePeriod = 0.1f;
+    public float airChargeRate = 0.05f;
     [Space(10)]
     public float chargeMax = 0.9f; //The maximal amount of time in which the player can charge
     public float chargeMin = 0.15f; //A bonus length aplied to all charges
@@ -81,11 +83,24 @@ public class PlayerBehaviour : MonoBehaviour {
     {
         if (col.gameObject.CompareTag(gameObject.tag))  //Checks if the other object's tag matches the current tag (is the object another player?)
         {
-            Rigidbody other = col.gameObject.GetComponent<Rigidbody>(); //Stores the collision object's Rigidbody in other
-            if (other.velocity.magnitude > body.velocity.magnitude) //Checks if the current object moves slower than the other object
+            if (mainPlayer)
             {
-                sound.HitPlayer(body.velocity.magnitude + other.velocity.magnitude);
-                body.velocity = body.velocity + (body.position - other.position).normalized * pushForce * other.velocity.magnitude; //Shoots self away from the other player
+                Rigidbody other = col.gameObject.GetComponent<Rigidbody>(); //Stores the collision object's Rigidbody in other
+
+                Vector2 colSpeed = body.velocity - other.velocity;
+
+                sound.HitPlayer(colSpeed.magnitude);
+
+                if (other.velocity.magnitude > body.velocity.magnitude) //Checks if the current object moves slower than the other object
+                {
+                    body.velocity = body.velocity + (body.position - other.position).normalized * pushForce * other.velocity.magnitude; //Shoots self away from the other player
+
+                }
+                else if (other.velocity.magnitude < body.velocity.magnitude)
+                {
+                    other.velocity = other.velocity + (other.position - body.position).normalized * pushForce * body.velocity.magnitude; //Shoots self away from the other player
+                }
+
             }
         }
         else
@@ -98,8 +113,13 @@ public class PlayerBehaviour : MonoBehaviour {
     {
         if (!col.gameObject.CompareTag(gameObject.tag)) //Checks if the tags DO NOT match
         {
-            onGround = true;    //Inform's the game that the player is on the ground
-            timeOfLastTouch = Time.time;
+            switch (col.gameObject.tag)
+            {
+                case "Arena":
+                    onGround = true;    //Inform's the game that the player is on the ground
+                    timeOfLastTouch = Time.time;
+                    break;
+            }
         }
     }
 
@@ -123,6 +143,7 @@ public class PlayerBehaviour : MonoBehaviour {
         {
             if (!charging && energy >= energyCostMin)  //Check if already charging
             {
+                sound.ChargeDash();
                 chargeStart = Time.time;    //Set the start time of the charge
                 charging = true;    //Inform the system that the charge has started
                 
@@ -166,6 +187,7 @@ public class PlayerBehaviour : MonoBehaviour {
 
     public void Dash()
     {
+        sound.CancelDashCharge();
         if (energy >= energyCostMin && chargeDir >= 0)
         {
             sound.Dash();
@@ -208,13 +230,16 @@ public class PlayerBehaviour : MonoBehaviour {
 
     public void RegenerateEnergy()
     {
-        if(Time.time - timeOfLastTouch <= gracePeriod && Time.time - timeOfLastDash >= gracePeriod) 
+        if (Time.time - timeOfLastDash >= gracePeriod)
         {
-            energy = Mathf.Min(energy + energyRegenRate * Time.deltaTime, maxEnergy);
-        }
-        else if(energy < energyCostMin)
-        {
-            energy += energyRegenRate / 45 * Time.deltaTime;
+            if (Time.time - timeOfLastTouch <= gracePeriod)
+            {
+                energy = Mathf.Min(energy + energyRegenRate * Time.deltaTime, maxEnergy);
+            }
+            else
+            {
+                energy += airChargeRate * Time.deltaTime;
+            }
         }
     }
 
