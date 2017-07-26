@@ -7,6 +7,7 @@ public class OutOfScreenMarkers : MonoBehaviour {
     private PlayerBehaviour playerScript;
     public Image image;
     public float arrowSize = 32;
+    public Image icon;
 
     void Awake()
     {
@@ -32,14 +33,13 @@ public class OutOfScreenMarkers : MonoBehaviour {
             transform.position = new Vector2(Mathf.Max(Mathf.Min(Screen.width - arrowSize, playerScreenPosition.x), arrowSize), Mathf.Max(Mathf.Min(Screen.height - arrowSize, playerScreenPosition.y), arrowSize));
             Vector2 toPlayer = playerScreenPosition - transform.position;
             transform.eulerAngles = new Vector3(0, 0, FindDirection(toPlayer));
+            icon.transform.position = new Vector2(Mathf.Max(Mathf.Min(Screen.width - arrowSize, playerScreenPosition.x), arrowSize), Mathf.Max(Mathf.Min(Screen.height - arrowSize, playerScreenPosition.y), arrowSize));
         }
         else
         {
             transform.position = new Vector2(-200, -200);
-            return;
+            icon.transform.position = new Vector2(-200, -200);
         }
-
-        
     }
 
     public float FindDirection(Vector2 vector)
