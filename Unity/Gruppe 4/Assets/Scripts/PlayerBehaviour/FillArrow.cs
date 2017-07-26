@@ -25,11 +25,16 @@ public class FillArrow : MonoBehaviour
     {
         if (playerBehaviour.charging && playerBehaviour.chargeDir >= 0)
         {
-            arrow.fillAmount = Mathf.Min(Time.time - playerBehaviour.chargeStart, playerBehaviour.chargeMax) / playerBehaviour.chargeMax;
+            arrow.fillAmount = Mathf.Min(Time.time - playerBehaviour.chargeStart, playerBehaviour.chargeMax, CalculateMaxCharge()) / playerBehaviour.chargeMax;
         }
         else
         {
             transform.position = new Vector3(-250, -250, 0);
         }
+    }
+
+    public float CalculateMaxCharge()
+    {
+        return ((playerBehaviour.energy - playerBehaviour.energyCostMin) / playerBehaviour.energyCostRate);
     }
 }
