@@ -21,15 +21,16 @@ public class PlayerSounds : MonoBehaviour {
     public void HitGround(float velocity)
     {
         //volume increases as velocity increases
-        //Debug.Log("hit ground with velocity " + velocity);
+//        Debug.Log("hit ground with velocity " + velocity);
+        if (velocity <= 1.3f) return;
 
-        audio[1].volume = velocity * 0.5f;
+        audio[1].volume = velocity * 3f;
         Play(hitGround,1);
     }
 
     public void HitPlayer(float velocity)
     {
-        Debug.Log("Hit player with velocity " + velocity);
+//        Debug.Log("Hit player with velocity " + velocity);
         //TODO calc volume
         audio[2].volume = velocity * 0.5f;
         Play(hitPlayer,2);
@@ -37,7 +38,7 @@ public class PlayerSounds : MonoBehaviour {
 
     public void ChargeDash()
     {
-        audio[3].volume = 0.3f;
+        audio[3].volume = 0.1f;
         Play(dashCharge, 3);
     }
 

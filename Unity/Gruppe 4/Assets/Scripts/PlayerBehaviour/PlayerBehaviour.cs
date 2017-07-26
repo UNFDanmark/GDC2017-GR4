@@ -4,6 +4,7 @@ using System.Collections;
 public class PlayerBehaviour : MonoBehaviour {
 
     public bool mainPlayer = false;
+    public bool isDead = false;
     public string horizontalAxis;   //The axis used for moving left and right and for aiming
     public string verticalAxis; //Another axis used for aiming
     public string chargeDashAxis;   //The axis used for the inputs to charge and execute a dash
@@ -21,6 +22,7 @@ public class PlayerBehaviour : MonoBehaviour {
     public float walkSpeed = 1; //The amount of speed with which the player "walks"
     public float dashForce = 25;    //The amount of force with which the player dashes
     public float chargeParachuteFactor = 2;
+    public float respawnTime = 2;
     [Space(20)]
     public Rigidbody body;  //The object's Rigidbody
     public Collider collision;  //The object's collider
@@ -35,6 +37,7 @@ public class PlayerBehaviour : MonoBehaviour {
     public float energy;
     public float timeOfLastTouch = 0;
     public float timeOfLastDash = 0;
+    public float timeSinceDeath;
 
 
     public PlayerSounds sound;
@@ -202,17 +205,34 @@ public class PlayerBehaviour : MonoBehaviour {
         }
     }
 
+
     public void KO()    //KO's a player and respawns them
     {
-        transform.position = spawn; //Sets the player's current position to the spawn position
-        body.velocity = new Vector3(0, 0, 0);   //Sets the current speed to be 0
-        body.angularVelocity = new Vector3(0, 0, 0);    //Stops the current rotation
-        energy = maxEnergy;
+        // prøvede at lave spawn på en timer men det lykkedes ikke \/
+        if (!isDead)
+        {
+            timeSinceDeath = Time.time;
+            isDead = true;
+        }
+        print("dead");
 
-        //======================================================================================
+        if (Time.time > timeSinceDeath + respawnTime)
+        {
+        // prøvede at lave spawn på en timer men det lykkedes ikke /\
 
-        main.GetComponent<Main>().KOD(gameObject, this);
+            transform.position = spawn; //Sets the player's current position to the spawn position
+            body.velocity = new Vector3(0, 0, 0);   //Sets the current speed to be 0
+            body.angularVelocity = new Vector3(0, 0, 0);    //Stops the current rotation
+            energy = maxEnergy;
+            isDead = false;
+
+
+            //======================================================================================
+
+            main.GetComponent<Main>().KOD(gameObject, this);
+        }
     }
+
 
     public bool KOCheck()   //Checks if the player is KO'd
     {
