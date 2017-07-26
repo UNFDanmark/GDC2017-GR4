@@ -6,6 +6,7 @@ public class EnergyBar : MonoBehaviour {
 
     public GameObject player;
     private PlayerBehaviour playerBehaviour;
+    public Image bar;
 
     void Awake()
     {
@@ -19,6 +20,6 @@ public class EnergyBar : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        transform.localScale = new Vector3(transform.localScale.x, playerBehaviour.energy / playerBehaviour.maxEnergy, 1);
+        bar.fillAmount = playerBehaviour.energy / playerBehaviour.maxEnergy;
 	}
 }

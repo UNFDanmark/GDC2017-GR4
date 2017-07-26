@@ -26,6 +26,6 @@ public class MinEnergy : MonoBehaviour {
 
     public void SetHeight()
     {
-        transform.localScale = new Vector3(transform.localScale.x, playerBehaviour.energyCostMin / playerBehaviour.maxEnergy, 1);
+        image.fillAmount = playerBehaviour.energyCostMin / playerBehaviour.maxEnergy;
     }
 }
