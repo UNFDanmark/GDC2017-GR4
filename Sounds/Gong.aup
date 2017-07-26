@@ -1,0 +1,31 @@
+<?xml version="1.0" standalone="no" ?>
+<!DOCTYPE project PUBLIC "-//audacityproject-1.3.0//DTD//EN" "http://audacity.sourceforge.net/xml/audacityproject-1.3.0.dtd" >
+<project xmlns="http://audacity.sourceforge.net/xml/" projname="Gong_data" version="1.3.0" audacityversion="2.1.0" sel0="1.9773242630" sel1="1.9773242630" vpos="0" h="3.8098866213" zoom="2756.2500000000" rate="44100.0" snapto="off" selectionformat="hh:mm:ss + milliseconds">
+	<tags/>
+	<wavetrack name="Lydspor" channel="0" linked="1" mute="0" solo="0" height="150" minimized="0" isSelected="1" rate="44100" gain="1.0" pan="0.0">
+		<waveclip offset="0.00000000">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="221570">
+				<waveblock start="0">
+					<simpleblockfile filename="e0000341.au" len="217088" min="-0.562593" max="0.576338" rms="0.050248"/>
+				</waveblock>
+				<waveblock start="217088">
+					<simpleblockfile filename="e0000456.au" len="4482" min="-0.000523" max="0.000329" rms="0.000035"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+	</wavetrack>
+	<wavetrack name="Lydspor" channel="1" linked="0" mute="0" solo="0" height="150" minimized="0" isSelected="1" rate="44100" gain="1.0" pan="0.0">
+		<waveclip offset="0.00000000">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="221570">
+				<waveblock start="0">
+					<simpleblockfile filename="e0000b1a.au" len="217088" min="-0.566131" max="0.571829" rms="0.048763"/>
+				</waveblock>
+				<waveblock start="217088">
+					<simpleblockfile filename="e000079c.au" len="4482" min="-0.000445" max="0.000431" rms="0.000036"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+	</wavetrack>
+</project>
