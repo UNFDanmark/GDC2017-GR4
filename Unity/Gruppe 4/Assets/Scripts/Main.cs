@@ -40,6 +40,12 @@ public class Main : MonoBehaviour {
 	void Update () {
         for(int i = 0; i < player.Length; i++)
         {
+
+            // Find pos.
+            // Spawn smoke.
+            // Wait 0.5 sek.
+            // Spawn player.
+
             if(!playerBehaviour[i].alive && Time.time - playerBehaviour[i].timeOfDeath >= respawnTime)
             {
                 Respawn(i);
@@ -71,6 +77,27 @@ public class Main : MonoBehaviour {
         playerBehaviour[deadIndex].timeOfDeath = Time.time;
         playerBehaviour[deadIndex].alive = false;
         playerUI[deadIndex].GetComponent<DeadIcon>().SetAliveState(false);
+
+        int ahead = 0;
+        int highestScore = 0;
+        for(int i = 0; i < score.Length; i++)
+        {
+            if(score[i] > highestScore)
+            {
+                highestScore = score[i];
+            }
+            ahead = i;
+        }
+
+        if (score[1 - ahead] <= highestScore - 5)
+        {
+            playerBehaviour[1 - ahead].maxEnergy = playerBehaviour[1 - ahead].baseMaxEnergy + Mathf.Floor((highestScore - score[1 - ahead]) / 5);
+        }
+        else
+        {
+            playerBehaviour[1 - ahead].maxEnergy = playerBehaviour[1 - ahead].baseMaxEnergy;
+        }
+
     }
 
     public void Respawn(int deadIndex)

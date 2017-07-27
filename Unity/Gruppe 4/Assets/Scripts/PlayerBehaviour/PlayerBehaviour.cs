@@ -39,8 +39,11 @@ public class PlayerBehaviour : MonoBehaviour {
     public bool alive = true;
     public float timeOfDeath = 0;
     public float maxEnergy = 2;
+    public bool doomed = false;
     [Space(20)]
     public PlayerSounds sound;
+
+    public GameObject smokePrefab;
 
     
     void Awake ()
@@ -68,6 +71,7 @@ public class PlayerBehaviour : MonoBehaviour {
         {
             Charge();   //Run the charge command
             RegenerateEnergy();
+            CheckIfDoomed();
         }
     }
 
@@ -197,6 +201,28 @@ public class PlayerBehaviour : MonoBehaviour {
         }
     }
 
+    public void CheckIfDoomed()
+    {
+        if(!Physics.Raycast(transform.position, Vector3.down, 50))
+        {
+            if ((transform.position.x > 0 && body.velocity.x > 0) || (transform.position.x < 0 && body.velocity.x < 0))
+            {
+                if (energy < energyCostMin)
+                {
+                    if (!doomed)
+                    {
+                        print("DAMMIT");
+                    }
+                    doomed = true;
+                }
+            }
+        }
+        else
+        {
+            doomed = false;
+        }
+    }
+
     public void Dash()
     {
         sound.CancelDashCharge();
@@ -266,6 +292,15 @@ public class PlayerBehaviour : MonoBehaviour {
 
     public void Respawn()
     {
+        // Spawn smoke.
+        Vector3 smokePos = body.transform.position;
+        smokePos.z = -1;
+        GameObject smoke = (GameObject) Instantiate(smokePrefab, smokePos, Quaternion.identity);
+        if(mainPlayer)
+            smoke.GetComponent<ParticleSystem>().startColor = Color.red;
+        else
+            smoke.GetComponent<ParticleSystem>().startColor = Color.blue;
+
         body.velocity = new Vector3(0, 0, 0);   //Sets the current speed to be 0
         body.angularVelocity = new Vector3(0, 0, 0);    //Stops the current rotation
         energy = maxEnergy;
