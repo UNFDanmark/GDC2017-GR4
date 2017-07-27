@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 public class AudioController : MonoBehaviour {
 
+    public bool isStartScene = true;
+
     public AudioSource audioSourceOne;
     public AudioSource audioSourceTwo;
     public List<AudioClip> clips;
@@ -10,7 +12,8 @@ public class AudioController : MonoBehaviour {
 
     public float ambientVolume = 0.5f;
 
-    private void Start() {
+    private void Start()
+    {
         sounds = new Dictionary<string, AudioClip>();
         for (int i = 0; i < clips.Count; i++)
         {
@@ -18,7 +21,14 @@ public class AudioController : MonoBehaviour {
         }
 
         // Start bagground music.
-        Play("main menu ambience");
+        if (isStartScene)
+        {
+            Play("main menu ambience");
+        }
+        else {
+            Play("victory screen");
+            Play("main menu ambience");
+        }
     }
 
     void Update() {
@@ -43,6 +53,8 @@ public class AudioController : MonoBehaviour {
     void SetVolume(AudioSource audioS, string name) {
         if (name == "main menu ambience")
             audioS.volume = ambientVolume;
+        else if(name == "main menu ambience")
+            audioS.volume = 0.3f;
         else
             audioS.volume = 1;
     }

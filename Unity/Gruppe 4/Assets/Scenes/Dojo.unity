@@ -2263,6 +2263,8 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 51f9576563fb39c4d8ea9b4070f06eec, type: 3}
   - {fileID: 8300000, guid: 62eab45a88d58f94e8eadf57e9bee8bb, type: 3}
   - {fileID: 8300000, guid: dd09bbe831590b74691a97973379e87e, type: 3}
+  - {fileID: 8300000, guid: 6ca5f48b514dcb2469b15d04b613f4b3, type: 3}
+  - {fileID: 8300000, guid: a0eb89f88cecc914bbc8542bd7d0a040, type: 3}
   hitGround:
   - {fileID: 8300000, guid: cd9deb061102aeb448286afea16def1a, type: 3}
   hitPlayer:
@@ -4892,6 +4894,8 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 51f9576563fb39c4d8ea9b4070f06eec, type: 3}
   - {fileID: 8300000, guid: 62eab45a88d58f94e8eadf57e9bee8bb, type: 3}
   - {fileID: 8300000, guid: dd09bbe831590b74691a97973379e87e, type: 3}
+  - {fileID: 8300000, guid: 6ca5f48b514dcb2469b15d04b613f4b3, type: 3}
+  - {fileID: 8300000, guid: a0eb89f88cecc914bbc8542bd7d0a040, type: 3}
   hitGround:
   - {fileID: 8300000, guid: cd9deb061102aeb448286afea16def1a, type: 3}
   hitPlayer: []

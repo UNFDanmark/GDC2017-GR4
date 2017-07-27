@@ -3769,13 +3769,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93dc0c171a7965d478264b49c2f744ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isStartScene: 1
   audioSourceOne: {fileID: 1811002877}
   audioSourceTwo: {fileID: 1811002879}
   clips:
   - {fileID: 8300000, guid: 18cb51b4cd325944e947fc3ab1f37a72, type: 3}
   - {fileID: 8300000, guid: b04a6f36aa254974eb1104fc7ecd1cd2, type: 3}
-  - {fileID: 8300000, guid: 0edabd312fd9fdd4eabe24e8c4fef568, type: 3}
-  ambientVolume: 0.2
+  - {fileID: 8300000, guid: 10b9d3d3f8c4f8e439d704e25d5ca5ab, type: 3}
+  ambientVolume: 1
 --- !u!82 &1811002879
 AudioSource:
   m_ObjectHideFlags: 0

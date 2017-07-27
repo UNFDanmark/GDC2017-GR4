@@ -20,6 +20,7 @@ public class Main : MonoBehaviour {
 
     void Awake()
     {
+        Cursor.visible = false;
         playerBehaviour = new PlayerBehaviour[player.Length];
         for (int i = 0; i < playerBehaviour.Length; i++)
         {
@@ -74,7 +75,7 @@ public class Main : MonoBehaviour {
             {
                 globalVariables.score = score;
                 globalVariables.gameTime = Time.time - gameStart;
-                SceneManager.LoadScene("VictoryScreen");
+                SceneManager.LoadScene("VictoryScene");
             }
             else if (!suddenDeath)
             {

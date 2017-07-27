@@ -36,6 +36,7 @@ public class WinnerScreenControlller : MonoBehaviour
 
     void Awake()
     {
+        Cursor.visible = true;
         globalVariables = GameObject.FindGameObjectWithTag("GLOBAL").GetComponent<GlobalVariables>();
     }
 
