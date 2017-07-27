@@ -22,7 +22,6 @@ public class ButtonController : MonoBehaviour
     public Text tTime;
 
     void Start() {
-        SetOptions();
     }
 
     public void BStart()
