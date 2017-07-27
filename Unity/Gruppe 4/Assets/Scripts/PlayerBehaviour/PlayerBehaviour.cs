@@ -249,7 +249,7 @@ public class PlayerBehaviour : MonoBehaviour {
 
     public void KO()    //KO's a player and respawns them
     {
-        sound.DeathSound();
+        
         CancelCharge();
         energy = 0;
         main.GetComponent<Main>().KOD(gameObject, this);

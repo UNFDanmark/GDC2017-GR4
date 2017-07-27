@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class Main : MonoBehaviour {
 
@@ -11,8 +12,9 @@ public class Main : MonoBehaviour {
     public Vector3[] respawnPoints;
     public float respawnTime = 2.5f;
     public Image[] playerUI = new Image[2];
-    private GlobalVariables globalVariables;
+    public GlobalVariables globalVariables;
     public float handicapMod = 0.5f;
+    public float gameStart = 0;
 
     void Awake()
     {
@@ -34,6 +36,7 @@ public class Main : MonoBehaviour {
         {
             Respawn(i);
         }
+        gameStart = Time.time;
 	}
 	
 	// Update is called once per frame
@@ -50,6 +53,13 @@ public class Main : MonoBehaviour {
             {
                 Respawn(i);
             }
+
+            if(Time.time - gameStart > globalVariables.timeLimit && globalVariables.timed)
+            {
+                globalVariables.score = score;
+                globalVariables.gameTime = Time.time - gameStart;
+                SceneManager.LoadScene("VictoryScreen");
+            }
         }
 	
 	}
@@ -57,8 +67,6 @@ public class Main : MonoBehaviour {
 
     public void KOD(GameObject victim, PlayerBehaviour victimScript)
     {
-        //ADD SOUND EFFECT HERE!!
-
         int deadIndex = 0;
         bool found = false;
         {
@@ -98,6 +106,17 @@ public class Main : MonoBehaviour {
             playerBehaviour[1 - ahead].maxEnergy = playerBehaviour[1 - ahead].baseMaxEnergy;
         }
 
+        if(globalVariables.scored && score[ahead] >= globalVariables.scoreLimit)
+        {
+            globalVariables.score = score;
+            globalVariables.gameTime = Time.time - gameStart;
+            SceneManager.LoadScene("VictoryScreen");
+        }
+        else
+        {
+            print("HELLO");
+            playerBehaviour[deadIndex].sound.DeathSound();
+        }
     }
 
     public void Respawn(int deadIndex)

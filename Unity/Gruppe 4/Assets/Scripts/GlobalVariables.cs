@@ -4,13 +4,14 @@ using UnityEngine.SceneManagement;
 
 public class GlobalVariables : MonoBehaviour
 {
-    public float[] score = { 0, 0 };
+    public int[] score = { 0, 0 };
     public bool timed = true;
-    public bool infinite = false;
+    public bool scored = true;
     public int timeLimit = 5;
     public int scoreLimit = 10;
     public bool handicap = false;
     private bool active = false;
+    public float gameTime;
 
     void Awake()
     {
