@@ -38,8 +38,9 @@ public class PlayerBehaviour : MonoBehaviour {
     public float timeOfLastTouch = 0;
     public float timeOfLastDash = 0;
     public float timeSinceDeath;
-
-
+    public bool alive = true;
+    public float timeOfDeath = 0;
+    [Space(20)]
     public PlayerSounds sound;
 
     
@@ -50,6 +51,8 @@ public class PlayerBehaviour : MonoBehaviour {
         energy = maxEnergy;
         timeOfLastTouch = 0;
         timeOfLastDash = 0;
+        alive = true;
+        timeOfDeath = Time.time - main.GetComponent<Main>().respawnTime;
     }
 
 	// Use this for initialization
@@ -61,25 +64,31 @@ public class PlayerBehaviour : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
-        Charge();   //Run the charge command
-        RegenerateEnergy();
+        if (alive)
+        {
+            Charge();   //Run the charge command
+            RegenerateEnergy();
+        }
     }
 
     void FixedUpdate()  //Runs 50 times per second
     {
-        if (!charging)
+        if (alive)
         {
-            Move(walkSpeed);    //Run the walk command with the object's walk speed
-        }
-        else 
-        {
-            if (body.velocity.y < 0)
+            if (!charging)
             {
-                body.velocity = (new Vector3(body.velocity.x, body.velocity.y / chargeParachuteFactor, body.velocity.z));
+                Move(walkSpeed);    //Run the walk command with the object's walk speed
             }
-        }
+            else
+            {
+                if (body.velocity.y < 0)
+                {
+                    body.velocity = (new Vector3(body.velocity.x, body.velocity.y / chargeParachuteFactor, body.velocity.z));
+                }
+            }
 
-        if (KOCheck()) KO();    //Checks if the player is KO'd, and if they are, KO them
+            if (KOCheck()) KO();    //Checks if the player is KO'd, and if they are, KO them
+        }
     }
     
     public void OnCollisionEnter(Collision col)    //Runs when initiating contact with other objects
@@ -208,29 +217,8 @@ public class PlayerBehaviour : MonoBehaviour {
 
     public void KO()    //KO's a player and respawns them
     {
-        // prøvede at lave spawn på en timer men det lykkedes ikke \/
-        if (!isDead)
-        {
-            timeSinceDeath = Time.time;
-            isDead = true;
-        }
-        print("dead");
-
-        if (Time.time > timeSinceDeath + respawnTime)
-        {
-        // prøvede at lave spawn på en timer men det lykkedes ikke /\
-
-            transform.position = spawn; //Sets the player's current position to the spawn position
-            body.velocity = new Vector3(0, 0, 0);   //Sets the current speed to be 0
-            body.angularVelocity = new Vector3(0, 0, 0);    //Stops the current rotation
-            energy = maxEnergy;
-            isDead = false;
-
-
-            //======================================================================================
-
-            main.GetComponent<Main>().KOD(gameObject, this);
-        }
+        charging = false;
+        main.GetComponent<Main>().KOD(gameObject, this);
     }
 
 
@@ -261,6 +249,15 @@ public class PlayerBehaviour : MonoBehaviour {
                 energy += airChargeRate * Time.deltaTime;
             }
         }
+    }
+
+    public void Respawn()
+    {
+        body.velocity = new Vector3(0, 0, 0);   //Sets the current speed to be 0
+        body.angularVelocity = new Vector3(0, 0, 0);    //Stops the current rotation
+        energy = maxEnergy;
+        isDead = false;
+        charging = false;
     }
 
     public float SetChargeDirection(int x, int y)
