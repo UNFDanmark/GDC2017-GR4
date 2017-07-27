@@ -4,14 +4,10 @@ using UnityEngine.UI;
 
 public class DeadIcon : MonoBehaviour
 {
-    public Image alive;
-    public Image dead;
-    private Vector2 imgPos;
 
-    void Awake()
-    {
-        imgPos = alive.transform.position;
-    }
+    public Sprite alive;
+    public Sprite dead;
+    public Image image;
 
     // Use this for initialization
     void Start()
@@ -27,17 +23,15 @@ public class DeadIcon : MonoBehaviour
     }
 
 
-    public void SetDeadState (bool state)
+    public void SetAliveState (bool state)
     {
-        if (state)
+        if(state)
         {
-            alive.transform.position = imgPos;
-            dead.transform.position = new Vector2(-500, -500);
+            image.sprite = alive;
         }
         else
         {
-            alive.transform.position = new Vector2(-500, -500);
-            dead.transform.position = imgPos;
+            image.sprite = dead;
         }
     }
 }

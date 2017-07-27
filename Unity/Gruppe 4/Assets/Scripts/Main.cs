@@ -74,7 +74,7 @@ public class Main : MonoBehaviour {
         player[deadIndex].transform.position = new Vector3(0, -100, 0);
         playerBehaviour[deadIndex].timeOfDeath = Time.time;
         playerBehaviour[deadIndex].alive = false;
-        playerUI[deadIndex].GetComponent<DeadIcon>().SetDeadState(false);
+        playerUI[deadIndex].GetComponent<DeadIcon>().SetAliveState(false);
     }
 
     public void Respawn(int deadIndex)
@@ -90,6 +90,6 @@ public class Main : MonoBehaviour {
         playerBehaviour[deadIndex].alive = true;
         player[deadIndex].transform.position = respawnPoints[spawnPoint];
         playerBehaviour[deadIndex].Respawn();
-        playerUI[deadIndex].GetComponent<DeadIcon>().SetDeadState(true);
+        playerUI[deadIndex].GetComponent<DeadIcon>().SetAliveState(true);
     }
 }
