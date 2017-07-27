@@ -28,7 +28,7 @@ public class OutOfScreenMarkers : MonoBehaviour {
     public void SetMarker()
     {
         Vector3 playerScreenPosition = Camera.main.WorldToScreenPoint(player.transform.position);
-        if (playerScreenPosition.x > Screen.width || playerScreenPosition.x < 0 || playerScreenPosition.y > Screen.height || playerScreenPosition.y < 0)
+        if ((playerScreenPosition.x > Screen.width || playerScreenPosition.x < 0 || playerScreenPosition.y > Screen.height || playerScreenPosition.y < 0) && playerScript.alive)
         {
             transform.position = new Vector2(Mathf.Max(Mathf.Min(Screen.width - arrowSize, playerScreenPosition.x), arrowSize), Mathf.Max(Mathf.Min(Screen.height - arrowSize, playerScreenPosition.y), arrowSize));
             Vector2 toPlayer = playerScreenPosition - transform.position;

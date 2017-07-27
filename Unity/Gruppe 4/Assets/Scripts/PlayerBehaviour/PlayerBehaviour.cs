@@ -4,7 +4,6 @@ using System.Collections;
 public class PlayerBehaviour : MonoBehaviour {
 
     public bool mainPlayer = false;
-    public bool isDead = false;
     public string horizontalAxis;   //The axis used for moving left and right and for aiming
     public string verticalAxis; //Another axis used for aiming
     public string chargeDashAxis;   //The axis used for the inputs to charge and execute a dash
@@ -37,9 +36,9 @@ public class PlayerBehaviour : MonoBehaviour {
     public float energy;
     public float timeOfLastTouch = 0;
     public float timeOfLastDash = 0;
-    public float timeSinceDeath;
-
-
+    public bool alive = true;
+    public float timeOfDeath = 0;
+    [Space(20)]
     public PlayerSounds sound;
 
     
@@ -50,6 +49,8 @@ public class PlayerBehaviour : MonoBehaviour {
         energy = maxEnergy;
         timeOfLastTouch = 0;
         timeOfLastDash = 0;
+        alive = true;
+        timeOfDeath = Time.time - main.GetComponent<Main>().respawnTime;
     }
 
 	// Use this for initialization
@@ -61,25 +62,31 @@ public class PlayerBehaviour : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
-        Charge();   //Run the charge command
-        RegenerateEnergy();
+        if (alive)
+        {
+            Charge();   //Run the charge command
+            RegenerateEnergy();
+        }
     }
 
     void FixedUpdate()  //Runs 50 times per second
     {
-        if (!charging)
+        if (alive)
         {
-            Move(walkSpeed);    //Run the walk command with the object's walk speed
-        }
-        else 
-        {
-            if (body.velocity.y < 0)
+            if (!charging)
             {
-                body.velocity = (new Vector3(body.velocity.x, body.velocity.y / chargeParachuteFactor, body.velocity.z));
+                Move(walkSpeed);    //Run the walk command with the object's walk speed
             }
-        }
+            else
+            {
+                if (body.velocity.y < 0)
+                {
+                    body.velocity = (new Vector3(body.velocity.x, body.velocity.y / chargeParachuteFactor, body.velocity.z));
+                }
+            }
 
-        if (KOCheck()) KO();    //Checks if the player is KO'd, and if they are, KO them
+            if (KOCheck()) KO();    //Checks if the player is KO'd, and if they are, KO them
+        }
     }
     
     public void OnCollisionEnter(Collision col)    //Runs when initiating contact with other objects
@@ -205,32 +212,18 @@ public class PlayerBehaviour : MonoBehaviour {
         }
     }
 
+    public float FindDirection(Vector2 vector)
+    {
+        float angle = Vector2.Angle(vector, Vector2.right);
+        if (vector.y < 0) angle = 360 - angle;
+        return (angle);
+    }
 
     public void KO()    //KO's a player and respawns them
     {
-        // prøvede at lave spawn på en timer men det lykkedes ikke \/
-        if (!isDead)
-        {
-            timeSinceDeath = Time.time;
-            isDead = true;
-        }
-        print("dead");
-
-        if (Time.time > timeSinceDeath + respawnTime)
-        {
-        // prøvede at lave spawn på en timer men det lykkedes ikke /\
-
-            transform.position = spawn; //Sets the player's current position to the spawn position
-            body.velocity = new Vector3(0, 0, 0);   //Sets the current speed to be 0
-            body.angularVelocity = new Vector3(0, 0, 0);    //Stops the current rotation
-            energy = maxEnergy;
-            isDead = false;
-
-
-            //======================================================================================
-
-            main.GetComponent<Main>().KOD(gameObject, this);
-        }
+        charging = false;
+        energy = 0;
+        main.GetComponent<Main>().KOD(gameObject, this);
     }
 
 
@@ -263,48 +256,23 @@ public class PlayerBehaviour : MonoBehaviour {
         }
     }
 
+    public void Respawn()
+    {
+        body.velocity = new Vector3(0, 0, 0);   //Sets the current speed to be 0
+        body.angularVelocity = new Vector3(0, 0, 0);    //Stops the current rotation
+        energy = maxEnergy;
+        charging = false;
+    }
+
     public float SetChargeDirection(int x, int y)
     {
-        switch (x)
+        if (x == 0 && y == 0)
         {
-            case -1:
-                switch(y)
-                {
-                    case -1:
-                        return (225);
-                    case 0:
-                        return (180);
-                    case 1:
-                        return (135);
-                    default:
-                        return (180);
-                }
-            case 0:
-                switch (y)
-                {
-                    case -1:
-                        return (270);
-                    case 0:
-                        return (-1);
-                    case 1:
-                        return (90);
-                    default:
-                        return (-1);
-                }
-            case 1:
-                switch (y)
-                {
-                    case -1:
-                        return (315);
-                    case 0:
-                        return (0);
-                    case 1:
-                        return (45);
-                    default:
-                        return (0);
-                }
-            default:
-                return (-1);
+            return (-1);
+        }
+        else
+        {
+            return (FindDirection(new Vector2(x, y)));
         }
     }
 
