@@ -269,7 +269,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   score: 0000000000000000
   timed: 1
-  scored: 1
+  scored: 0
   timeLimit: 100
   scoreLimit: 2
   handicap: 0
