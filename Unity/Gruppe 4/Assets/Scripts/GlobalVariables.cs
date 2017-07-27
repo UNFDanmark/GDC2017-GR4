@@ -9,6 +9,7 @@ public class GlobalVariables : MonoBehaviour
     public bool scored = true;
     public int timeLimit = 5;
     public int scoreLimit = 10;
+    public bool platforms = true;
     public bool handicap = false;
     private bool active = false;
     public float gameTime;
@@ -22,7 +23,6 @@ public class GlobalVariables : MonoBehaviour
         
         active = true;
         DontDestroyOnLoad(gameObject);
-        SceneManager.LoadScene("Dojo");
     }
 
     // Use this for initialization

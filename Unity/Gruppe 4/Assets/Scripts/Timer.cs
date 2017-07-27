@@ -5,6 +5,7 @@ using UnityEngine.UI;
 public class Timer : MonoBehaviour {
     public Image[] minutes = new Image[2];
     public Image[] seconds = new Image[2];
+    public Image colon;
 
     public Sprite[] numbers = new Sprite[10];
 
@@ -18,13 +19,14 @@ public class Timer : MonoBehaviour {
     // Use this for initialization
     void Start ()
     {
-	    if(!main.globalVariables.timed)
+	    if(!main.globalVariables.timed || main.suddenDeath)
         {
             for (int i = 0; i < 2; i++)
             {
                 minutes[i].transform.position = new Vector2(0, -200);
                 seconds[i].transform.position = new Vector2(0, -200);
             }
+            colon.transform.position = new Vector2(0, -200);
         }
         setNumbers();
 
@@ -33,14 +35,25 @@ public class Timer : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
-        setNumbers();
-
+        if (!main.globalVariables.timed || main.suddenDeath)
+        {
+            for (int i = 0; i < 2; i++)
+            {
+                minutes[i].transform.position = new Vector2(0, -200);
+                seconds[i].transform.position = new Vector2(0, -200);
+            }
+            colon.transform.position = new Vector2(0, -200);
+        }
+        else
+        {
+            setNumbers();
+        }
     }
 
 
     public void setNumbers()
     {
-        float timeRemaining = main.globalVariables.timeLimit - (Time.time - main.gameStart);
+        float timeRemaining = Mathf.Max(main.globalVariables.timeLimit - (Time.time - main.gameStart), 0);
 
         int sec = (int) Mathf.Floor(timeRemaining % 60);
 

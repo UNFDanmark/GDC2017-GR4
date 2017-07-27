@@ -10,11 +10,13 @@ public class Main : MonoBehaviour {
     private PlayerBehaviour[] playerBehaviour;
     public string[] playerName = { "P1", "P2" };
     public Vector3[] respawnPoints;
+    public Vector3[] platformRespawn;
+    public Vector3[] noPlatformRespawn;
     public float respawnTime = 2.5f;
     public Image[] playerUI = new Image[2];
     public GlobalVariables globalVariables;
-    public float handicapMod = 0.5f;
     public float gameStart = 0;
+    public bool suddenDeath = false;
 
     void Awake()
     {
@@ -32,6 +34,14 @@ public class Main : MonoBehaviour {
 	// Use this for initialization
 	void Start ()
     {
+        if(globalVariables.platforms)
+        {
+            respawnPoints = platformRespawn;
+        }
+        else
+        {
+            respawnPoints = noPlatformRespawn;
+        }
         for(int i = 0; i < player.Length; i++)
         {
             Respawn(i);
@@ -53,16 +63,27 @@ public class Main : MonoBehaviour {
             {
                 Respawn(i);
             }
-
-            if(Time.time - gameStart > globalVariables.timeLimit && globalVariables.timed)
+        }
+        if (Time.time - gameStart > globalVariables.timeLimit && globalVariables.timed)
+        {
+            if (score[0] != score[1])
             {
                 globalVariables.score = score;
                 globalVariables.gameTime = Time.time - gameStart;
                 SceneManager.LoadScene("VictoryScreen");
             }
+            else if (!suddenDeath)
+            {
+                for (int p = 0; p < player.Length; p++)
+                {
+                    playerBehaviour[p].pushForce *= 6;
+                    Respawn(p);
+                }
+                suddenDeath = true;
+            }
         }
-	
-	}
+
+    }
 
 
     public void KOD(GameObject victim, PlayerBehaviour victimScript)
@@ -106,7 +127,7 @@ public class Main : MonoBehaviour {
             playerBehaviour[1 - ahead].maxEnergy = playerBehaviour[1 - ahead].baseMaxEnergy;
         }
 
-        if(globalVariables.scored && highestScore >= globalVariables.scoreLimit)
+        if(globalVariables.scored && highestScore >= globalVariables.scoreLimit || suddenDeath)
         {
             globalVariables.score = score;
             globalVariables.gameTime = Time.time - gameStart;
