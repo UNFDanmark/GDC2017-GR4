@@ -7,7 +7,8 @@ public class ScoreDisplay : MonoBehaviour {
     public GameObject main;
     public int playerIndex = 0;
     private Main mainScript;
-    public Text text;
+    public Image[] ciphers = new Image[4];
+    public bool left = true;
 
     void Awake()
     {
