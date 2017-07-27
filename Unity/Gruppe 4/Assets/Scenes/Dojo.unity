@@ -850,6 +850,48 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 525733315}
+--- !u!1001 &539752005
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4000010663518700, guid: 46d852a7395cc4d47b2428c1f3e9e6e1, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: -13.59
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000010663518700, guid: 46d852a7395cc4d47b2428c1f3e9e6e1, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 15.18
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000010663518700, guid: 46d852a7395cc4d47b2428c1f3e9e6e1, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000010663518700, guid: 46d852a7395cc4d47b2428c1f3e9e6e1, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000010663518700, guid: 46d852a7395cc4d47b2428c1f3e9e6e1, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000010663518700, guid: 46d852a7395cc4d47b2428c1f3e9e6e1, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000010663518700, guid: 46d852a7395cc4d47b2428c1f3e9e6e1, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000010663518700, guid: 46d852a7395cc4d47b2428c1f3e9e6e1, type: 2}
+      propertyPath: m_RootOrder
+      value: 9
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: 46d852a7395cc4d47b2428c1f3e9e6e1, type: 2}
+  m_IsPrefabParent: 0
 --- !u!1 &568100857 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 100000, guid: 39fb67415af5c274a9e99a4367131568, type: 3}
@@ -1979,7 +2021,7 @@ MonoBehaviour:
   horizontalAxis: HorizontalP1
   verticalAxis: VerticalP1
   chargeDashAxis: ChargeDashP1
-  baseMaxEnergy: 2
+  baseMaxEnergy: 4
   energyCostRate: 0.81
   energyCostMin: 0.19
   energyRegenRate: 2
@@ -1987,7 +2029,7 @@ MonoBehaviour:
   airChargeRate: 0.1
   chargeMax: 0.9
   chargeMin: 0.1
-  pushForce: 0.5
+  pushForce: 0.8
   walkSpeed: 0.1
   dashForce: 22.5
   chargeParachuteFactor: 1.05
@@ -2006,7 +2048,10 @@ MonoBehaviour:
   alive: 1
   timeOfDeath: 0
   maxEnergy: 4
+  doomed: 0
   sound: {fileID: 969745505}
+  smokePrefab: {fileID: 1000014217865216, guid: 46d852a7395cc4d47b2428c1f3e9e6e1,
+    type: 2}
 --- !u!114 &969745505
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4248,7 +4293,7 @@ MonoBehaviour:
   horizontalAxis: HorizontalP2
   verticalAxis: VerticalP2
   chargeDashAxis: ChargeDashP2
-  baseMaxEnergy: 2
+  baseMaxEnergy: 4
   energyCostRate: 0.81
   energyCostMin: 0.19
   energyRegenRate: 2
@@ -4256,7 +4301,7 @@ MonoBehaviour:
   airChargeRate: 0.1
   chargeMax: 0.9
   chargeMin: 0.1
-  pushForce: 0.5
+  pushForce: 0.8
   walkSpeed: 0.1
   dashForce: 22.5
   chargeParachuteFactor: 1.05
@@ -4275,7 +4320,10 @@ MonoBehaviour:
   alive: 1
   timeOfDeath: 0
   maxEnergy: 4
+  doomed: 0
   sound: {fileID: 1748251907}
+  smokePrefab: {fileID: 1000014217865216, guid: 46d852a7395cc4d47b2428c1f3e9e6e1,
+    type: 2}
 --- !u!114 &1748251907
 MonoBehaviour:
   m_ObjectHideFlags: 0

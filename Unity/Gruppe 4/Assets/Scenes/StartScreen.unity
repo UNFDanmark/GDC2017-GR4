@@ -272,7 +272,9 @@ MonoBehaviour:
   - 0
   timed: 1
   infinite: 1
-  hi: HI
+  timeLimit: 5
+  scoreLimit: 10
+  handicap: 0
 --- !u!4 &1790580145
 Transform:
   m_ObjectHideFlags: 0
