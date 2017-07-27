@@ -97,6 +97,7 @@ public class ButtonController : MonoBehaviour
 
     string FixScore(float value) {
         int v = (int)Mathf.Round(value * 100);
+        globalVariables.scoreLimit = v;
         globalVariables.scored = v > 0;
         string s = v.ToString();
         if(!globalVariables.scored)

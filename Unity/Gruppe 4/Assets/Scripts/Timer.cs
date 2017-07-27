@@ -6,13 +6,18 @@ public class Timer : MonoBehaviour {
     public Image[] minutes = new Image[2];
     public Image[] seconds = new Image[2];
     public Image colon;
+    public Image SuddenDeath;
 
     public Sprite[] numbers = new Sprite[10];
 
     private Main main;
 
+    private Vector2 suddenStart;
+
     void Awake()
     {
+        suddenStart = SuddenDeath.transform.position;
+        SuddenDeath.transform.position = new Vector2(0, -200);
         main = gameObject.GetComponent<Main>();
     }
 
@@ -27,6 +32,7 @@ public class Timer : MonoBehaviour {
                 seconds[i].transform.position = new Vector2(0, -200);
             }
             colon.transform.position = new Vector2(0, -200);
+            
         }
         setNumbers();
 
@@ -43,6 +49,10 @@ public class Timer : MonoBehaviour {
                 seconds[i].transform.position = new Vector2(0, -200);
             }
             colon.transform.position = new Vector2(0, -200);
+            if (main.suddenDeath && main.globalVariables.timed)
+            {
+                SuddenDeath.transform.position = suddenStart;
+            }
         }
         else
         {
