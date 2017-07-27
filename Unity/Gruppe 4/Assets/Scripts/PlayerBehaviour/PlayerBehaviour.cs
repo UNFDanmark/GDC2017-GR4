@@ -4,7 +4,6 @@ using System.Collections;
 public class PlayerBehaviour : MonoBehaviour {
 
     public bool mainPlayer = false;
-    public bool isDead = false;
     public string horizontalAxis;   //The axis used for moving left and right and for aiming
     public string verticalAxis; //Another axis used for aiming
     public string chargeDashAxis;   //The axis used for the inputs to charge and execute a dash
@@ -37,7 +36,6 @@ public class PlayerBehaviour : MonoBehaviour {
     public float energy;
     public float timeOfLastTouch = 0;
     public float timeOfLastDash = 0;
-    public float timeSinceDeath;
     public bool alive = true;
     public float timeOfDeath = 0;
     [Space(20)]
@@ -214,10 +212,17 @@ public class PlayerBehaviour : MonoBehaviour {
         }
     }
 
+    public float FindDirection(Vector2 vector)
+    {
+        float angle = Vector2.Angle(vector, Vector2.right);
+        if (vector.y < 0) angle = 360 - angle;
+        return (angle);
+    }
 
     public void KO()    //KO's a player and respawns them
     {
         charging = false;
+        energy = 0;
         main.GetComponent<Main>().KOD(gameObject, this);
     }
 
@@ -256,52 +261,18 @@ public class PlayerBehaviour : MonoBehaviour {
         body.velocity = new Vector3(0, 0, 0);   //Sets the current speed to be 0
         body.angularVelocity = new Vector3(0, 0, 0);    //Stops the current rotation
         energy = maxEnergy;
-        isDead = false;
         charging = false;
     }
 
     public float SetChargeDirection(int x, int y)
     {
-        switch (x)
+        if (x == 0 && y == 0)
         {
-            case -1:
-                switch(y)
-                {
-                    case -1:
-                        return (225);
-                    case 0:
-                        return (180);
-                    case 1:
-                        return (135);
-                    default:
-                        return (180);
-                }
-            case 0:
-                switch (y)
-                {
-                    case -1:
-                        return (270);
-                    case 0:
-                        return (-1);
-                    case 1:
-                        return (90);
-                    default:
-                        return (-1);
-                }
-            case 1:
-                switch (y)
-                {
-                    case -1:
-                        return (315);
-                    case 0:
-                        return (0);
-                    case 1:
-                        return (45);
-                    default:
-                        return (0);
-                }
-            default:
-                return (-1);
+            return (-1);
+        }
+        else
+        {
+            return (FindDirection(new Vector2(x, y)));
         }
     }
 
