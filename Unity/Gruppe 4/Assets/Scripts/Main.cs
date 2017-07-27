@@ -47,6 +47,10 @@ public class Main : MonoBehaviour {
             Respawn(i);
         }
         gameStart = Time.time;
+        for (int i = 0; i < globalVariables.score.Length; i++)
+        {
+            globalVariables.score[i] = 0;
+        }
 	}
 	
 	// Update is called once per frame
@@ -131,7 +135,7 @@ public class Main : MonoBehaviour {
         {
             globalVariables.score = score;
             globalVariables.gameTime = Time.time - gameStart;
-            SceneManager.LoadScene("VictoryScreen");
+            SceneManager.LoadScene("VictoryScene");
         }
         else
         {
