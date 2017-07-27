@@ -44,8 +44,6 @@ public class Timer : MonoBehaviour {
 
         int sec = (int) Mathf.Floor(timeRemaining % 60);
 
-        print(sec);
-
         int s10 = (int)Mathf.Floor(sec / 10);
         int s1 = sec % 10;
 
