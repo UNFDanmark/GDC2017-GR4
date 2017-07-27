@@ -8,7 +8,7 @@ public class PlayerBehaviour : MonoBehaviour {
     public string verticalAxis; //Another axis used for aiming
     public string chargeDashAxis;   //The axis used for the inputs to charge and execute a dash
     [Space(20)]
-    public float maxEnergy = 2;
+    public float baseMaxEnergy = 2;
     public float energyCostRate = 1;
     public float energyCostMin = 0.1f;
     public float energyRegenRate = 2;
@@ -38,12 +38,14 @@ public class PlayerBehaviour : MonoBehaviour {
     public float timeOfLastDash = 0;
     public bool alive = true;
     public float timeOfDeath = 0;
+    public float maxEnergy = 2;
     [Space(20)]
     public PlayerSounds sound;
 
     
     void Awake ()
     {
+        maxEnergy = baseMaxEnergy;
         body = GetComponent<Rigidbody>();   //Sets the Rigidbody
         spawn = transform.position; //Sets the spawn position to the start position
         energy = maxEnergy;
@@ -221,11 +223,17 @@ public class PlayerBehaviour : MonoBehaviour {
 
     public void KO()    //KO's a player and respawns them
     {
-        charging = false;
+        sound.DeathSound();
+        CancelCharge();
         energy = 0;
         main.GetComponent<Main>().KOD(gameObject, this);
     }
 
+    public void CancelCharge()
+    {
+        charging = false;
+        sound.CancelDashCharge();
+    }
 
     public bool KOCheck()   //Checks if the player is KO'd
     {

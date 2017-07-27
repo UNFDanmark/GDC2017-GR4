@@ -11,6 +11,8 @@ public class Main : MonoBehaviour {
     public Vector3[] respawnPoints;
     public float respawnTime = 2.5f;
     public Image[] playerUI = new Image[2];
+    private GlobalVariables globalVariables;
+    public float handicapMod = 0.5f;
 
     void Awake()
     {
@@ -19,24 +21,18 @@ public class Main : MonoBehaviour {
         {
             playerBehaviour[i] = player[i].GetComponent<PlayerBehaviour>();
         }
+        if(globalVariables == null)
+        {
+            globalVariables = GameObject.FindGameObjectWithTag("GLOBAL").GetComponent<GlobalVariables>();
+        }
     }
 
 	// Use this for initialization
-	void Start () {
-        if (respawnPoints.Length <= player.Length)
+	void Start ()
+    {
+        for(int i = 0; i < player.Length; i++)
         {
-            int[] spawnpoints = new int[player.Length];
-            spawnpoints[0] = Random.Range(0, respawnPoints.Length);
-            spawnpoints[1] = Random.Range(0, respawnPoints.Length);
-            while(spawnpoints[0] == spawnpoints[1])
-            {
-                spawnpoints[1] = Random.Range(0, respawnPoints.Length);
-            }
-
-            for(int i = 0; i < spawnpoints.Length; i++)
-            {
-                player[i].transform.position = respawnPoints[spawnpoints[i]];
-            }
+            Respawn(i);
         }
 	}
 	
@@ -91,5 +87,7 @@ public class Main : MonoBehaviour {
         player[deadIndex].transform.position = respawnPoints[spawnPoint];
         playerBehaviour[deadIndex].Respawn();
         playerUI[deadIndex].GetComponent<DeadIcon>().SetAliveState(true);
+
+        playerBehaviour[deadIndex].sound.RespawnSound();
     }
 }

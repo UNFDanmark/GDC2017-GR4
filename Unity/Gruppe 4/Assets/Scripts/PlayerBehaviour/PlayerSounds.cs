@@ -9,6 +9,8 @@ public class PlayerSounds : MonoBehaviour {
     public AudioClip[] hitGround;
     public AudioClip[] hitPlayer;
     public AudioClip[] dashCharge;
+    public AudioClip[] deathSound;
+    public AudioClip[] respawnSound;
 
     public new AudioSource[] audio; //should have as many as there are unique sounds to play in parallel
 
@@ -47,9 +49,17 @@ public class PlayerSounds : MonoBehaviour {
         audio[3].Stop();
     }
 
-    //TODO special situation for dashCharge (can be cancelled!)
-    //TODO special situation for ambience (loops, should be put in a different script!)
+    public void DeathSound()
+    {
+        audio[4].volume = 0.7f;
+        Play(deathSound, 4);
+    }
     
+    public void RespawnSound()
+    {
+        audio[4].volume = 1;
+        Play(respawnSound, 4);
+    }
 
 
     //generic play function - is called in specific audio settings
