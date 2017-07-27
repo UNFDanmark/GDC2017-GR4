@@ -93,8 +93,8 @@ public class Main : MonoBehaviour {
             if(score[i] > highestScore)
             {
                 highestScore = score[i];
+                ahead = i;
             }
-            ahead = i;
         }
 
         if (score[1 - ahead] <= highestScore - 5)
@@ -106,7 +106,7 @@ public class Main : MonoBehaviour {
             playerBehaviour[1 - ahead].maxEnergy = playerBehaviour[1 - ahead].baseMaxEnergy;
         }
 
-        if(globalVariables.scored && score[ahead] >= globalVariables.scoreLimit)
+        if(globalVariables.scored && highestScore >= globalVariables.scoreLimit)
         {
             globalVariables.score = score;
             globalVariables.gameTime = Time.time - gameStart;
